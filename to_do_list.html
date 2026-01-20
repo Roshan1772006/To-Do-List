@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>To Do List UI</title>
+
+<style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body{
+    height: 99vh;
+    width: 200vh;
+    display: flex;
+    background: linear-gradient(to right, #ffd966 50%, #5b8def 50%);
+    align-items: center;
+    justify-content: center;
+}
+
+.wrapper{
+    width: 1000px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.todo-card{
+    width: 420px;
+    background: #f5f9ff;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.header h3{
+    font-size: 18px;
+    color: #333;
+}
+
+.header button{
+    padding: 6px 16px;
+    border: none;
+    border-radius: 6px;
+    background: #4f7df3;
+    color: white;
+    cursor: pointer;
+}
+
+.todo-card p{
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.todo-card span{
+    color: #4f7df3;
+    font-weight: bold;
+}
+
+.task{
+    background: white;
+    padding: 12px 14px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.task-left{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.task-left label{
+    font-size: 14px;
+}
+
+.note{
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.task-right button{
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.edit{
+    background: #4f7df3;
+    color: white;
+}
+
+.delete{
+    background: #f25555;
+    color: white;
+}
+
+.text-area{
+    color: #222;
+}
+
+.text-area h2{
+    font-size: 28px;
+}
+
+.text-area h1{
+    font-size: 70px;
+    margin: 10px 0;
+}
+
+.text-area p{
+    font-size: 26px;
+    letter-spacing: 1px;
+}
+</style>
+</head>
+
+<body>
+<div class="wrapper">
+
+    <div class="todo-card">
+        <div class="header">
+            <h3>Review Presentation</h3>
+            <button onclick="addTask()">Add</button>
+        </div>
+
+        <p>You have <span id="count">3</span> task(s) to complete</p>
+
+        <div id="taskList">
+            <div class="task">
+                <div class="task-left">
+                    <input type="checkbox" onchange="toggleTask(this)">
+                    <div>
+                        <label>Edit Video</label>
+                        <div class="note"></div>
+                    </div>
+                </div>
+                <div class="task-right">
+                    <button class="edit" onclick="addNote(this)">✎</button>
+                    <button class="delete" onclick="deleteTask(this)">🗑</button>
+                </div>
+            </div>
+
+            <div class="task">
+                <div class="task-left">
+                    <input type="checkbox" onchange="toggleTask(this)">
+                    <div>
+                        <label>Buy Eggs & Milk</label>
+                        <div class="note"></div>
+                    </div>
+                </div>
+                <div class="task-right">
+                    <button class="edit" onclick="addNote(this)">✎</button>
+                    <button class="delete" onclick="deleteTask(this)">🗑</button>
+                </div>
+            </div>
+
+            <div class="task">
+                <div class="task-left">
+                    <input type="checkbox" onchange="toggleTask(this)">
+                    <div>
+                        <label>Organize Files</label>
+                        <div class="note"></div>
+                    </div>
+                </div>
+                <div class="task-right">
+                    <button class="edit" onclick="addNote(this)">✎</button>
+                    <button class="delete" onclick="deleteTask(this)">🗑</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-area">
+        <h2>With Free Source Code</h2>
+        <h1>TO DO LIST</h1>
+        <H2>HTML, CSS, JavaScript</H2>
+    </div>
+
+</div>
+
+<script>
+function toggleTask(checkbox) {
+    const label = checkbox.closest(".task-left").querySelector("label");
+    if (checkbox.checked) {
+        label.style.textDecoration = "line-through";
+        label.style.color = "#999";
+    } else {
+        label.style.textDecoration = "none";
+        label.style.color = "#000";
+    }
+}
+
+function addTask() {
+    const taskName = prompt("Enter new task:");
+    if (!taskName) return;
+
+    const taskList = document.getElementById("taskList");
+
+    const task = document.createElement("div");
+    task.className = "task";
+
+    task.innerHTML = `
+        <div class="task-left">
+            <input type="checkbox" onchange="toggleTask(this)">
+            <div>
+                <label>${taskName}</label>
+                <div class="note"></div>
+            </div>
+        </div>
+        <div class="task-right">
+            <button class="edit" onclick="addNote(this)">✎</button>
+            <button class="delete" onclick="deleteTask(this)">🗑</button>
+        </div>
+    `;
+
+    taskList.appendChild(task);
+    updateCount();
+}
+
+function addNote(btn) {
+    const task = btn.closest(".task");
+    const noteDiv = task.querySelector(".note");
+    const current = noteDiv.innerText;
+    const note = prompt("Add / Edit note:", current);
+
+    if (note !== null) {
+        noteDiv.innerText = note;
+    }
+}
+
+function deleteTask(btn) {
+    btn.closest(".task").remove();
+    updateCount();
+}
+
+function updateCount() {
+    const total = document.querySelectorAll(".task").length;
+    document.getElementById("count").innerText = total;
+}
+</script>
+
+</body>
+</html>
